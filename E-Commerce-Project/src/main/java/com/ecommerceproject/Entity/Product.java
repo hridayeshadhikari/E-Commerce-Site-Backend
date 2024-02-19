@@ -21,7 +21,19 @@ public class Product {
     private Long productId;
 
     private String title;
-    private String price;
+
+    private String description;
+    private int price;
+    @Column(name = "discounted_Price")
+    private int discountedPrice;
+    @Column(name = "discount_percentage")
+    private int discountPercent;
+
+    private int quantity;
+    private String brand;
+    private String color;
+    @Column(name = "Image Url")
+    private String imageUrl;
 
     @Embedded
     @ElementCollection
