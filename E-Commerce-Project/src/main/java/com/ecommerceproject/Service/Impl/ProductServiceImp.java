@@ -96,7 +96,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public List<Product> findProductByCategory(String category) {
-        return ;
+        return null;
     }
 
     @Override
