@@ -7,7 +7,7 @@ import com.ecommerceproject.Request.AddItemRequest;
 
 public interface CartService {
     Cart createCart(User user);
-    String addCartItem(Long userId, AddItemRequest request);
+    String addCartItem(Long userId, AddItemRequest request) throws Exception;
     Cart findUserCart(Long userId);
 
 }
