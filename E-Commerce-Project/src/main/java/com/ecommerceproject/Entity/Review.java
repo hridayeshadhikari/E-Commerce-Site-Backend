@@ -18,9 +18,9 @@ import java.time.LocalDateTime;
 public class Review {
 
     @Id
-    private int id;
+    private Long id;
 
-    private String title;
+    private String review;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
