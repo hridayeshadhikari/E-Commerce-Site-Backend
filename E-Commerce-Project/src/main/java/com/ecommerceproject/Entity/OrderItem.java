@@ -21,10 +21,10 @@ public class OrderItem {
     private Order order;
     @ManyToOne
     private Product product;
-    private Size size;
+    private String size;
     private Integer quantity;
-    private Integer price;
-    private Integer discountedPrice;
+    private Double price;
+    private Double discountedPrice;
     private Long userId;
     private LocalDateTime deliveryDate;
 }

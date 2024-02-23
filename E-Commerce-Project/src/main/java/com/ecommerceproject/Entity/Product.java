@@ -23,9 +23,9 @@ public class Product {
     private String title;
 
     private String description;
-    private int price;
+    private Double price;
     @Column(name = "discounted_Price")
-    private int discountedPrice;
+    private Double discountedPrice;
     @Column(name = "discount_percentage")
     private int discountPercent;
 

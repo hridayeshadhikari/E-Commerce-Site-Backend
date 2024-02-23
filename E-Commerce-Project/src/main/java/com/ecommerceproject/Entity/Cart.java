@@ -25,7 +25,7 @@ public class Cart {
     private Set<CartItem> cartItems=new HashSet<>();
 
     private int itemQuantity;
-    private int totalPrice;
-    private int discountPrice;
-    private int discount;
+    private Double totalPrice;
+    private Double discountPrice;
+    private Double discount;
 }

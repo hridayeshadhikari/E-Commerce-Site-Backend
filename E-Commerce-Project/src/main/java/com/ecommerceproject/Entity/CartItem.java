@@ -23,8 +23,8 @@ public class CartItem {
     private Product product;
     private Long userId;
     private String size;
-    private int price;
-    private int discountPrice;
+    private Double price;
+    private Double discountPrice;
     private int quantity;
 
 }

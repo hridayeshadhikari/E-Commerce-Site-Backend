@@ -24,13 +24,13 @@ public class Order {
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private List<OrderItem> orderItems=new ArrayList<>();
 
-    private Date orderDate;
-    private Date deliveryDate;
+    private LocalDateTime orderDate;
+    private LocalDateTime deliveryDate;
     @OneToOne
-    private String shippingAddress;
+    private Address shippingAddress;
     private Double price;
     private Double discountPrice;
-    private Integer discount;
+    private Double discount;
     private String orderStatus;
     @Embedded
     private PaymentDetails paymentDetails=new PaymentDetails();
