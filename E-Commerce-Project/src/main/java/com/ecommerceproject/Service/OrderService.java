@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface OrderService {
     Order createOrder(User user, Address shippingAddress);
-    Order placedOrder (Long orderId);
-    Order confirmedOrder(Long orderId);
-    Order shippedOrder(Long orderId);
-    Order deliveredOrder(Long orderId);
-    Order findOrderById(Long orderId);
-    Order cancelOrder(Long orderId);
-    Order deleteOrder(Long orderId);
+    Order placedOrder (Long orderId) throws Exception;
+    Order confirmedOrder(Long orderId) throws Exception;
+    Order shippedOrder(Long orderId) throws Exception;
+    Order deliveredOrder(Long orderId) throws Exception;
+    Order findOrderById(Long orderId) throws Exception;
+    Order cancelOrder(Long orderId) throws Exception;
+    void deleteOrder(Long orderId) throws Exception;
     List<Order> userOrderHistory(Long userId);
     List<Order> getAllOrder();
 
