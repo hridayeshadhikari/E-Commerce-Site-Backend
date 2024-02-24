@@ -15,8 +15,8 @@ import java.util.Set;
 public class CreateProductRequest {
     private String title;
     private String description;
-    private int price;
-    private int discountedPrice;
+    private Double price;
+    private Double discountedPrice;
     private int discountPercent;
     private int quantity;
     private String brand;

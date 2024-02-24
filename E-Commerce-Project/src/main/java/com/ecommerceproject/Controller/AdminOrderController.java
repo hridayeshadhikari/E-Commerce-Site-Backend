@@ -18,7 +18,7 @@ import java.util.List;
 public class AdminOrderController {
     private OrderService orderService;
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<Order>> getAllOrders(){
         List<Order> orders=orderService.getAllOrder();
         return new ResponseEntity<>(orders,HttpStatus.ACCEPTED);
@@ -26,7 +26,7 @@ public class AdminOrderController {
 
     @PutMapping("/{orderId}/confirmed")
     public ResponseEntity<Order> confirmedOrder(){
-
+    return null;
     }
 
 }
