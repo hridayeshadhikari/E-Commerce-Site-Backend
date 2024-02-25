@@ -4,6 +4,7 @@ import com.ecommerceproject.Entity.Address;
 import com.ecommerceproject.Entity.Order;
 import com.ecommerceproject.Entity.User;
 import com.ecommerceproject.Exception.OrderException;
+import com.ecommerceproject.Exception.UserException;
 import com.ecommerceproject.Service.OrderService;
 import com.ecommerceproject.Service.UserService;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class OrderController {
 
     @PostMapping("/")
     public ResponseEntity<Order> createOrder(@RequestBody Address address,
-                                             @RequestHeader("Authorization") String jwt){
+                                             @RequestHeader("Authorization") String jwt) throws UserException {
         User user=userService.findUserByJwt(jwt);
         Order order=orderService.createOrder(user,address);
         return new ResponseEntity<Order>(order, HttpStatus.CREATED);
@@ -31,7 +32,7 @@ public class OrderController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Order>> userOrderHistory(@RequestHeader("Authorization") String jwt){
+    public ResponseEntity<List<Order>> userOrderHistory(@RequestHeader("Authorization") String jwt) throws UserException {
         User user=userService.findUserByJwt(jwt);
         List<Order> allOrders=orderService.userOrderHistory(user.getId());
         return new ResponseEntity<List<Order>>(allOrders,HttpStatus.OK);

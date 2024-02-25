@@ -3,6 +3,7 @@ package com.ecommerceproject.Service.Impl;
 import com.ecommerceproject.Entity.Product;
 import com.ecommerceproject.Entity.Rating;
 import com.ecommerceproject.Entity.User;
+import com.ecommerceproject.Exception.ProductException;
 import com.ecommerceproject.Exception.UserException;
 import com.ecommerceproject.Repository.RatingRepository;
 import com.ecommerceproject.Request.RatingRequest;
@@ -22,7 +23,7 @@ public class RatingServiceImpl implements RatingService {
     private ProductService productService;
 
     @Override
-    public Rating createRating(User user, RatingRequest request) throws Exception {
+    public Rating createRating(User user, RatingRequest request) throws ProductException {
         Product product=productService.findProductById(request.getProductId());
         Rating rating=new Rating();
         rating.setRating(request.getRating());
@@ -33,7 +34,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public List<Rating> getProductRating(Long productId) {
+    public List<Rating> getProductRating(Long productId) throws ProductException{
 
         return ratingRepository.getAllProductRating(productId);
     }
