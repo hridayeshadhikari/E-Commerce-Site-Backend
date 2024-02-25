@@ -2,6 +2,7 @@ package com.ecommerceproject.Service.Impl;
 
 import com.ecommerceproject.Entity.Category;
 import com.ecommerceproject.Entity.Product;
+import com.ecommerceproject.Exception.ProductException;
 import com.ecommerceproject.Repository.CategoryRepository;
 import com.ecommerceproject.Repository.ProductRepository;
 import com.ecommerceproject.Request.CreateProductRequest;
@@ -56,17 +57,17 @@ public class ProductServiceImp implements ProductService {
 
 
     @Override
-    public String deleteProduct(Long productId) throws Exception {
+    public String deleteProduct(Long productId) throws ProductException {
         Optional<Product> product=productRepository.findById(productId);
         if(product.isEmpty()){
-            throw new Exception("no product found with this id");
+            throw new ProductException("no product found with this id "+productId);
         }
         productRepository.deleteById(productId);
         return "deleted successfully";
     }
 
     @Override
-    public Product updateProduct(Long productId, Product product) throws Exception {
+    public Product updateProduct(Long productId, Product product) throws ProductException {
         Product product1=findProductById(productId);
         if(product1!=null){
             product1.setTitle(product.getTitle());
@@ -86,12 +87,18 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public Product findProductById(Long productId) throws Exception {
+    public Product findProductById(Long productId) throws ProductException {
         Optional<Product> product=productRepository.findById(productId);
         if(product.isEmpty()){
-            throw new Exception("no product found with this id");
+            throw new ProductException("no product found with this id "+productId);
         }
         return product.get();
+    }
+
+    @Override
+    public List<Product> findAllProduct() {
+        List<Product> products=productRepository.findAll();
+        return products;
     }
 
     @Override

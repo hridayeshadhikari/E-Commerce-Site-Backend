@@ -19,6 +19,11 @@ public class GlobalException {
     @ExceptionHandler(UserException.class)
     public ResponseEntity<ErrorDetails> otherExceptionHandler(UserException ue, WebRequest req){
         ErrorDetails error=new ErrorDetails(ue.getMessage(),req.getDescription(false), LocalDateTime.now());
-        return new ResponseEntity<ErrorDetails>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ErrorDetails>(error, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(ProductException.class)
+    public ResponseEntity<ErrorDetails> otherExceptionHandler(ProductException ue, WebRequest req){
+        ErrorDetails error=new ErrorDetails(ue.getMessage(),req.getDescription(false), LocalDateTime.now());
+        return new ResponseEntity<ErrorDetails>(error, HttpStatus.NOT_FOUND);
     }
 }
