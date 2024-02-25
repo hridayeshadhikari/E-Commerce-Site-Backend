@@ -4,6 +4,8 @@ import com.ecommerceproject.Entity.Cart;
 import com.ecommerceproject.Entity.CartItem;
 import com.ecommerceproject.Entity.Product;
 import com.ecommerceproject.Entity.User;
+import com.ecommerceproject.Exception.ProductException;
+import com.ecommerceproject.Exception.UserException;
 import com.ecommerceproject.Repository.CartRepository;
 import com.ecommerceproject.Request.AddItemRequest;
 import com.ecommerceproject.Service.CartItemService;
@@ -27,7 +29,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public String addCartItem(Long userId, AddItemRequest request) throws Exception {
+    public String addCartItem(Long userId, AddItemRequest request) throws ProductException, UserException {
         Cart cart=cartRepository.findByUserId(userId);
         Product product=productService.findProductById(request.getProductId());
         CartItem cartItemPresent=cartItemService.isCartExistAlready(cart,product, request.getSize(), userId);
