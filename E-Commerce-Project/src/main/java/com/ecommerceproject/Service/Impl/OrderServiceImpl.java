@@ -1,6 +1,7 @@
 package com.ecommerceproject.Service.Impl;
 
 import com.ecommerceproject.Entity.*;
+import com.ecommerceproject.Exception.OrderException;
 import com.ecommerceproject.Repository.AddressRepository;
 import com.ecommerceproject.Repository.OrderItemRepository;
 import com.ecommerceproject.Repository.OrderRepository;
@@ -80,44 +81,44 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order confirmedOrder(Long orderId) throws Exception {
+    public Order confirmedOrder(Long orderId) throws OrderException {
         Order order=findOrderById(orderId);
         order.setOrderStatus("CONFIRMED");
         return orderRepository.save(order);
     }
 
     @Override
-    public Order shippedOrder(Long orderId) throws Exception {
+    public Order shippedOrder(Long orderId) throws OrderException {
         Order order=findOrderById(orderId);
         order.setOrderStatus("SHIPPED");
         return orderRepository.save(order);
     }
 
     @Override
-    public Order deliveredOrder(Long orderId) throws Exception {
+    public Order deliveredOrder(Long orderId) throws OrderException {
         Order order=findOrderById(orderId);
         order.setOrderStatus("DELIVERED");
         return orderRepository.save(order);
     }
 
     @Override
-    public Order findOrderById(Long orderId) throws Exception {
+    public Order findOrderById(Long orderId) throws OrderException {
         Optional<Order> order =orderRepository.findById(orderId);
         if(order.isEmpty()){
-            throw new Exception("no order fond with this id");
+            throw new OrderException("no order found with this id "+orderId);
         }
         return order.get();
     }
 
     @Override
-    public Order cancelOrder(Long orderId) throws Exception {
+    public Order cancelOrder(Long orderId) throws OrderException {
         Order order=findOrderById(orderId);
         order.setOrderStatus("CANCELLED");
         return orderRepository.save(order);
     }
 
     @Override
-    public void deleteOrder(Long orderId) throws Exception {
+    public void deleteOrder(Long orderId) throws OrderException {
         Order order=findOrderById(orderId);
         orderRepository.deleteById(orderId);
     }

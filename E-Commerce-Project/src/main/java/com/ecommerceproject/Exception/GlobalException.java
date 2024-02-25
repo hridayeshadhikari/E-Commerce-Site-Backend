@@ -26,4 +26,10 @@ public class GlobalException {
         ErrorDetails error=new ErrorDetails(ue.getMessage(),req.getDescription(false), LocalDateTime.now());
         return new ResponseEntity<ErrorDetails>(error, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(OrderException.class)
+    public ResponseEntity<ErrorDetails> otherExceptionHandler(OrderException ue, WebRequest req){
+        ErrorDetails error=new ErrorDetails(ue.getMessage(),req.getDescription(false), LocalDateTime.now());
+        return new ResponseEntity<ErrorDetails>(error, HttpStatus.NOT_FOUND);
+    }
 }
