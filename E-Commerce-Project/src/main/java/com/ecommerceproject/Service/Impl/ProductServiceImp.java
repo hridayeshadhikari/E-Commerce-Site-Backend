@@ -101,13 +101,10 @@ public class ProductServiceImp implements ProductService {
         return products;
     }
 
-    @Override
-    public List<Product> findProductByCategory(String category) {
-        return null;
-    }
+
 
     @Override
-    public Page<Product> getAllProduct(String category, List<String> color,
+    public Page<Product> findProductByCategory(String category, List<String> color,
                                        List<String> size, Integer minPrice, Integer maxPrice,
                                        Integer minDiscount, Integer maxDiscount, String stock,
                                        String sort, Integer pageNumber, Integer pageSize) {

@@ -14,8 +14,7 @@ ProductService {
     Product updateProduct(Long productId,Product product) throws ProductException;
     Product findProductById(Long productId) throws ProductException;
     List<Product> findAllProduct();
-    List<Product> findProductByCategory(String category);
-    Page<Product> getAllProduct(String category,List<String> color,List<String> size,
+    Page<Product> findProductByCategory(String category,List<String> color,List<String> size,
                                 Integer minPrice,Integer maxPrice,Integer minDiscount,Integer maxDiscount,
                                 String stock,String sort,Integer pageNumber,Integer pageSize);
 
