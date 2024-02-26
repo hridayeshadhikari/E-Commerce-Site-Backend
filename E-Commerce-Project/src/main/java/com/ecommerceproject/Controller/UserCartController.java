@@ -28,8 +28,8 @@ public class UserCartController {
     }
 
     @PutMapping("/add")
-    public ResponseEntity<ApiResponse> addToCart(@RequestBody AddItemRequest request,
-                                                 @RequestHeader("Authorization") String jwt) throws ProductException, UserException {
+    public ResponseEntity<ApiResponse> addToCart(@RequestHeader("Authorization") String jwt,
+                                                 @RequestBody AddItemRequest request) throws ProductException, UserException {
         User user=userService.findUserByJwt(jwt);
         cartService.addCartItem(user.getId(),request);
 

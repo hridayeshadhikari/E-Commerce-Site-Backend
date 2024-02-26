@@ -1,10 +1,12 @@
 package com.ecommerceproject.Controller;
 
+import com.ecommerceproject.Entity.Cart;
 import com.ecommerceproject.Entity.User;
 import com.ecommerceproject.Repository.UserRepository;
 import com.ecommerceproject.Request.AuthRequest;
 import com.ecommerceproject.Response.AuthResponse;
 import com.ecommerceproject.Security.JwtProvider;
+import com.ecommerceproject.Service.CartService;
 import com.ecommerceproject.Service.Impl.CustomUserDetailService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,7 @@ public class AuthController {
     private UserRepository userRepository;
     private CustomUserDetailService userDetailService;
     private final PasswordEncoder passwordEncoder;
+    private CartService cartService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> registerUser(@RequestBody User user) throws Exception {
@@ -46,6 +49,7 @@ public class AuthController {
         createUser.setFirstName(firstName);
         createUser.setLastName(lastName);
         User newUser=userRepository.save(createUser);
+        Cart cart =cartService.createCart(newUser);
 
         Authentication authentication=new UsernamePasswordAuthenticationToken(newUser.getEmail(),newUser.getPassword());
         String token= JwtProvider.generateToken(authentication);

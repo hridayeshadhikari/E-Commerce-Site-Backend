@@ -4,6 +4,7 @@ import com.ecommerceproject.Entity.Cart;
 import com.ecommerceproject.Entity.CartItem;
 import com.ecommerceproject.Entity.Product;
 import com.ecommerceproject.Entity.User;
+import com.ecommerceproject.Exception.CartItemException;
 import com.ecommerceproject.Exception.UserException;
 import com.ecommerceproject.Repository.CartItemRepository;
 import com.ecommerceproject.Repository.CartRepository;
@@ -33,15 +34,15 @@ public class CartItemServiceImpl implements CartItemService {
 
 
     @Override
-    public CartItem findCartItemById(Long cartItemId) throws Exception {
+    public CartItem findCartItemById(Long cartItemId) throws CartItemException {
         Optional<CartItem> cartItem=cartItemRepository.findById(cartItemId);
         if (cartItem.isEmpty()){
-            throw new Exception("cart item does not exist with given id");
+            throw new CartItemException("cart item does not exist with given id");
         }
         return cartItem.get();
     }
     @Override
-    public CartItem updateCartItem(Long userId, Long id, CartItem cartItem) throws Exception {
+    public CartItem updateCartItem(Long userId, Long id, CartItem cartItem) throws CartItemException, UserException {
         CartItem cartItem1=findCartItemById(id);
         User user=userService.findUserById(cartItem1.getUserId());
         if(user.getId().equals(userId)){
@@ -59,7 +60,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void removeCartItem(Long userId, Long CartItemId) throws Exception {
+    public void removeCartItem(Long userId, Long CartItemId) throws CartItemException, UserException {
         CartItem cartItem=findCartItemById(CartItemId);
         User user=userService.findUserById(cartItem.getUserId());
         User loggedInUser=userService.findUserById(userId);
@@ -67,7 +68,7 @@ public class CartItemServiceImpl implements CartItemService {
             cartItemRepository.delete(cartItem);
         }
         else {
-            throw new Exception();
+            throw new CartItemException("no cart item found with this id");
         }
 
     }
