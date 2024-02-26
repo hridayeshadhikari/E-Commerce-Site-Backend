@@ -10,5 +10,5 @@ import org.springframework.data.repository.query.Param;
 public interface CartItemRepository extends JpaRepository<CartItem,Long> {
 
     @Query("SELECT ci FROM CartItem ci WHERE ci.cart=:cart AND ci.userId=:userId AND ci.product=:product AND ci.size=:size")
-    public CartItem isCartItemExist(@Param("cart") Cart cart, @Param("userId") Long userId, @Param("product")Product product,@Param("size")String size);
+    CartItem isCartItemExist(@Param("cart") Cart cart, @Param("userId") Long userId, @Param("product")Product product,@Param("size")String size);
 }

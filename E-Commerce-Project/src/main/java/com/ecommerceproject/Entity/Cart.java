@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -22,9 +22,9 @@ public class Cart {
     @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
     @Column(name = "cart_items")
-    private Set<CartItem> cartItems=new HashSet<>();
+    private List<CartItem> cartItems = new ArrayList<>();
 
     private int itemQuantity;
     private Double totalPrice;
