@@ -24,15 +24,15 @@ public class Product {
 
     private String description;
     private Double price;
-    @Column(name = "discounted_Price")
+    @Column(name = "discounted_price")
     private Double discountedPrice;
-    @Column(name = "discount_percentage")
+    @Column(name = "discount_percent")
     private int discountPercent;
 
     private int quantity;
     private String brand;
     private String color;
-    @Column(name = "Image Url")
+    @Column(name = "Image_Url")
     private String imageUrl;
 
     @Embedded

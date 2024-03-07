@@ -9,6 +9,7 @@ import com.ecommerceproject.Request.CreateProductRequest;
 import com.ecommerceproject.Service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,16 +27,33 @@ public class ProductServiceImp implements ProductService {
     private CategoryRepository categoryRepository;
     @Override
     public Product createProduct(CreateProductRequest request) {
-        String categoryName = request.getCategory();
-        Category category = categoryRepository.findByName(categoryName);
 
-        // If category doesn't exist, create and save it
-        if (category == null) {
-            category = new Category();
-            category.setName(categoryName);
-            category = categoryRepository.save(category);
+        Category firstLevel = categoryRepository.findByName(request.getFirstLevelCategory());
+
+
+        if(firstLevel==null){
+            Category firstLevelCategory=new Category();
+            firstLevelCategory.setName(request.getFirstLevelCategory());
+            firstLevelCategory.setLevel(1);
+            firstLevel=categoryRepository.save(firstLevelCategory);
+        }
+        Category secondLevel=categoryRepository.findByNameAndParent(request.getSecondLevelCategory(),firstLevel.getName());
+        if(secondLevel==null){
+            Category secondLevelCategory=new Category();
+            secondLevelCategory.setParentCategory(firstLevel);
+            secondLevelCategory.setName(request.getSecondLevelCategory());
+            secondLevelCategory.setLevel(2);
+            secondLevel=categoryRepository.save(secondLevelCategory);
         }
 
+        Category thirdLevel=categoryRepository.findByNameAndParent(request.getThirdLevelCategory(),secondLevel.getName());
+        if(thirdLevel==null){
+            Category thirdLevelCategory=new Category();
+            thirdLevelCategory.setParentCategory(secondLevel);
+            thirdLevelCategory.setName(request.getThirdLevelCategory());
+            thirdLevelCategory.setLevel(3);
+            thirdLevel=categoryRepository.save(thirdLevelCategory);
+        }
         Product product = new Product();
         product.setTitle(request.getTitle());
         product.setDescription(request.getDescription());
@@ -50,7 +68,7 @@ public class ProductServiceImp implements ProductService {
         product.setTimeStamp(LocalDateTime.now());
 
         // Associate the product with the category
-        product.setCategory(category);
+        product.setCategory(thirdLevel);
 
         return productRepository.save(product);
     }
@@ -67,20 +85,10 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Long productId, Product product) throws ProductException {
+    public Product updateProduct(Long productId, Product req) throws ProductException {
         Product product1=findProductById(productId);
-        if(product1!=null){
-            product1.setTitle(product.getTitle());
-            product1.setDescription(product.getDescription());
-            product1.setPrice(product.getPrice());
-            product1.setDiscountedPrice(product.getDiscountedPrice());
-            product1.setDiscountPercent(product.getDiscountPercent());
-            product1.setBrand(product.getBrand());
-            product1.setColor(product.getColor());
-            product1.setQuantity(product.getQuantity());
-            product1.setImageUrl(product.getImageUrl());
-            product1.setSize(product.getSize());
-            product1.setTimeStamp(LocalDateTime.now());
+        if(req.getQuantity()!=0){
+            product1.setQuantity(req.getQuantity());
         }
 
         return productRepository.save(product1);
@@ -95,35 +103,50 @@ public class ProductServiceImp implements ProductService {
         return product.get();
     }
 
-    @Override
-    public List<Product> findAllProduct() {
-        List<Product> products=productRepository.findAll();
-        return products;
-    }
-
 
 
     @Override
-    public Page<Product> findProductByCategory(String category, List<String> color,
-                                       List<String> size, Integer minPrice, Integer maxPrice,
-                                       Integer minDiscount, Integer maxDiscount, String stock,
-                                       String sort, Integer pageNumber, Integer pageSize) {
-        Pageable pageable= PageRequest.of(pageNumber,pageSize);
-        List<Product> products=productRepository.filterProduct(category,minPrice,minDiscount,maxDiscount,maxPrice,sort);
-        if(!color.isEmpty()){
-            products=products.stream().filter(p-> color.stream().anyMatch(c->c.equalsIgnoreCase(p.getColor()))).collect(Collectors.toList());
+    public Page<Product> getAllProducts(String category, List<String>colors,
+                                       List<String> sizes, Integer minPrice, Integer maxPrice,
+                                       Integer minDiscount,String sort, String stock, Integer pageNumber, Integer pageSize ) {
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        List<Product> products = productRepository.filterProduct(category, minPrice, maxPrice, minDiscount, sort);
+
+
+        if (!colors.isEmpty()) {
+            products = products.stream()
+                    .filter(p -> colors.stream().anyMatch(c -> c.equalsIgnoreCase(p.getColor())))
+                    .collect(Collectors.toList());
+
 
         }
+
         if(stock!=null) {
-            if (stock.equals("In_Stock")) {
-                products = products.stream().filter(p -> p.getQuantity() > 0)
-                        .collect(Collectors.toList());
-            } else if (stock.equals("Out_Of_Stock")) {
+
+            if(stock.equals("in_stock")) {
+                products=products.stream().filter(p->p.getQuantity()>0).collect(Collectors.toList());
+            }
+            else if (stock.equals("out_of_stock")) {
                 products=products.stream().filter(p->p.getQuantity()<1).collect(Collectors.toList());
             }
 
+
         }
-        
-        return null;
+        int startIndex = (int) pageable.getOffset();
+        int endIndex = Math.min(startIndex + pageable.getPageSize(), products.size());
+
+        List<Product> pageContent = products.subList(startIndex, endIndex);
+        Page<Product> filteredProducts = new PageImpl<>(pageContent, pageable, products.size());
+        return filteredProducts; // If color list is empty, do nothing and return all products
+
+
+    }
+
+
+    @Override
+    public List<Product> findAllProducts() {
+        return productRepository.findAll();
     }
 }

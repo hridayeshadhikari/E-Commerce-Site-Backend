@@ -15,6 +15,8 @@ import java.util.List;
 @RequestMapping("/api/admin/product")
 @AllArgsConstructor
 public class AdminProductController {
+
+
     private ProductService productService;
 
     @PostMapping("/")
@@ -43,7 +45,7 @@ public class AdminProductController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Product>> getAllProducts(){
-        List<Product> products=productService.findAllProduct();
+        List<Product> products=productService.findAllProducts();
         return new ResponseEntity<>(products,HttpStatus.OK);
     }
 

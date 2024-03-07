@@ -10,8 +10,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI usersMicroserviceOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("Social media webapp")
-                        .description("Api's and schema of social media webapp")
+                .info(new Info().title("ECommerce webapp")
+                        .description("Api's and schema of Ecommerce webapp")
                         .version("1.0"));
     }
 }
