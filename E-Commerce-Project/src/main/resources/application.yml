@@ -9,3 +9,8 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+razorpay:
+  api:
+    key: H2yfkFYDEMoP7B
+    secret: rzp_test_klAKH60o7sNzzt
