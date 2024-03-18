@@ -1,5 +1,6 @@
 package com.ecommerceproject.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class Rating {
 
     @ManyToOne(fetch = FetchType.LAZY)  //invoke relationship on demand
     @JoinColumn(name = "product_id")
+    @JsonIgnore
     private Product product;
 
 
