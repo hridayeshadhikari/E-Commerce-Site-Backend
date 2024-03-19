@@ -64,6 +64,8 @@ public class ProductServiceImp implements ProductService {
         product.setColor(request.getColor());
         product.setQuantity(request.getQuantity());
         product.setImageUrl(request.getImageUrl());
+        product.setExtraImageUrl(request.getExtraImageUrl());
+        product.setHighlights(request.getHighlights());
         product.setSize(request.getSize());
         product.setTimeStamp(LocalDateTime.now());
 

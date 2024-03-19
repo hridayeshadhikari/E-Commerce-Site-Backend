@@ -24,12 +24,12 @@ public class Order {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<OrderItem> orderItems=new ArrayList<>();
 
     private LocalDateTime orderDate;
     private LocalDateTime deliveryDate;
-    @OneToOne
+    @ManyToOne
     private Address shippingAddress;
     private Double price;
     private Double discountPrice;

@@ -35,6 +35,12 @@ public class Product {
     @Column(name = "Image_Url")
     private String imageUrl;
 
+    @ElementCollection
+    private List<String> extraImageUrl=new ArrayList<>();
+
+    @ElementCollection
+    private List<String> highlights=new ArrayList<>();
+
     @Embedded
     @ElementCollection
     private Set<Size> size=new HashSet<>();

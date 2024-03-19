@@ -67,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
         Order saveOrder=orderRepository.save(createdOrder);
         for(OrderItem item:orderItems){
             item.setOrder(saveOrder);
-            orderRepository.save(saveOrder);
+            orderItemRepository.save(item);
         }
         return saveOrder;
     }
