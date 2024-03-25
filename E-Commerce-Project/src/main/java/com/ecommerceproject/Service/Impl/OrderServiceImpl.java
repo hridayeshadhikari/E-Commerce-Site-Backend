@@ -13,8 +13,10 @@ import com.ecommerceproject.Service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +33,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order createOrder(User user, Address shippingAddress) {
+
         shippingAddress.setUser(user);
         Address address=addressRepository.save(shippingAddress);
         user.getAddress().add(address);
@@ -50,6 +53,7 @@ public class OrderServiceImpl implements OrderService {
             OrderItem createdOrderItem=orderItemRepository.save(orderItem);
             orderItems.add(createdOrderItem);
         }
+        SimpleDateFormat d=new SimpleDateFormat("dd/MM/yyyy");
         Order createdOrder=new Order();
         createdOrder.setUser(user);
         createdOrder.setOrderItems(orderItems);
@@ -57,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
         createdOrder.setPrice(cart.getTotalPrice());
         createdOrder.setDiscountPrice(cart.getDiscountPrice());
 
-        createdOrder.setOrderDate(LocalDateTime.now());
+        createdOrder.setOrderDate(d.format(new Date()));
         createdOrder.setTimeStamp(LocalDateTime.now());
         createdOrder.setShippingAddress(address);
         createdOrder.setDiscount(cart.getDiscount());
@@ -96,8 +100,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order deliveredOrder(Long orderId) throws OrderException {
+        SimpleDateFormat f=new SimpleDateFormat("dd/MM/yyyy");
         Order order=findOrderById(orderId);
         order.setOrderStatus("DELIVERED");
+        order.setDeliveryDate(f.format(new Date()));
         return orderRepository.save(order);
     }
 

@@ -44,4 +44,10 @@ public class OrderController {
         Order order=orderService.findOrderById(id);
         return new ResponseEntity<Order>(order,HttpStatus.OK);
     }
+
+    @PutMapping("/{orderId}/cancel")
+    public ResponseEntity<Order> cancelOrderRequest(@PathVariable Long orderId) throws OrderException {
+        Order order=orderService.cancelOrder(orderId);
+        return new ResponseEntity<>(order,HttpStatus.OK);
+    }
 }
