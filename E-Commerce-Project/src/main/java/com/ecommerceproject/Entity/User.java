@@ -25,7 +25,9 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private Role role;
+    @Column(unique = true, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoleEnum name;
 
     @Column(name = "mobile_number")
     private String mobile;
