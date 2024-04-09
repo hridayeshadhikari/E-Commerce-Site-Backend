@@ -22,7 +22,8 @@ public class CartController {
     private CartService cartService;
     @GetMapping("/")
     public ResponseEntity<Cart> getUsersCart(@RequestHeader("Authorization") String jwt) throws UserException {
-        User user=userService.findUserByJwt(jwt);
+        String token= jwt.substring("Bearer ".length());
+        User user=userService.findUserByJwt(token);
         Cart cart=cartService.findUserCart(user.getId());
         return new ResponseEntity<Cart>(cart, HttpStatus.OK);
     }
@@ -30,7 +31,8 @@ public class CartController {
     @PutMapping("/add")
     public ResponseEntity<ApiResponse> addToCart(@RequestHeader("Authorization") String jwt,
                                                  @RequestBody AddItemRequest request) throws ProductException, UserException {
-        User user=userService.findUserByJwt(jwt);
+        String token= jwt.substring("Bearer ".length());
+        User user=userService.findUserByJwt(token);
         cartService.addCartItem(user.getId(),request);
 
         ApiResponse res=new ApiResponse();

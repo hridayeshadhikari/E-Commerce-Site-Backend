@@ -18,6 +18,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private JwtProvider jwtProvider;
     @Override
     public User findUserById(Long userId) throws UserException {
         Optional<User> user=userRepository.findById(userId);
@@ -30,14 +32,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByJwt(String jwt) {
-        String email= JwtProvider.getEmailFromJwtToken(jwt);
-        User user=userRepository.findUserByEmail(email);
+        String email= jwtProvider.getUsername(jwt);
+        User user=userRepository.findByEmail(email);
         return user;
     }
 
     @Override
     public User findUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+        return userRepository.findByEmail(email);
     }
 
     @Override

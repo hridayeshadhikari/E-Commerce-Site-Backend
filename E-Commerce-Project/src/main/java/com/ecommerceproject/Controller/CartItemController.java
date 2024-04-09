@@ -23,7 +23,8 @@ public class CartItemController {
     @DeleteMapping("/{cartItemId}")
     public ResponseEntity<ApiResponse> deleteCartItem(@PathVariable Long cartItemId,
                                                       @RequestHeader("Authorization")String jwt) throws UserException, CartItemException {
-        User user=userService.findUserByJwt(jwt);
+        String token= jwt.substring("Bearer ".length());
+        User user=userService.findUserByJwt(token);
         itemService.removeCartItem(user.getId(),cartItemId);
         ApiResponse response=new ApiResponse();
         response.setMessage("item removed Successfully");
@@ -35,7 +36,8 @@ public class CartItemController {
     public ResponseEntity<CartItem> updateCartItem(@PathVariable Long cartItemId,
                                                    @RequestBody CartItem cartItem,
                                                    @RequestHeader("Authorization") String jwt) throws UserException, CartItemException {
-        User user=userService.findUserByJwt(jwt);
+        String token= jwt.substring("Bearer ".length());
+        User user=userService.findUserByJwt(token);
         CartItem cartItem1=itemService.updateCartItem(user.getId(),cartItemId,cartItem);
         return new ResponseEntity<CartItem>(cartItem1,HttpStatus.OK);
     }

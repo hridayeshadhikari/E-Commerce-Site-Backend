@@ -11,15 +11,19 @@ import com.ecommerceproject.Service.Impl.CustomUserDetailService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.swing.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,6 +35,9 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private CartService cartService;
 
+    private final JwtProvider jwtProvider;
+    private AuthenticationManager authenticationManager;
+
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> registerUser(@RequestBody User user) throws Exception {
 
@@ -38,7 +45,7 @@ public class AuthController {
         String password=user.getPassword();
         String firstName=user.getFirstName();
         String lastName=user.getLastName();
-        User isUserExist=userRepository.findUserByEmail(email);
+        User isUserExist=userRepository.findByEmail(email);
         if(isUserExist!=null){
             throw new Exception("this email is associated with another account");
         }
@@ -51,8 +58,12 @@ public class AuthController {
         User newUser=userRepository.save(createUser);
         Cart cart =cartService.createCart(newUser);
 
-        Authentication authentication=new UsernamePasswordAuthenticationToken(newUser.getEmail(),newUser.getPassword());
-        String token= JwtProvider.generateToken(authentication);
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                newUser.getEmail(),
+                newUser.getPassword()
+        ));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token= jwtProvider.generateToken(authentication);
         AuthResponse response= new AuthResponse(token,"Registration Successful");
         return new ResponseEntity<>(response,HttpStatus.CREATED);
 
@@ -60,21 +71,15 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> loginRequest(@RequestBody AuthRequest authRequest){
-        Authentication authentication=authenticate(authRequest.getEmail() ,authRequest.getPassword());
-        String token=JwtProvider.generateToken(authentication);
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                authRequest.getEmail(),
+                authRequest.getPassword()
+        ));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token= jwtProvider.generateToken(authentication);
         AuthResponse response=new AuthResponse(token,"Login Successful");
         return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
     }
 
-    private Authentication authenticate(String email,String password){
-        UserDetails userDetails= userDetailService.loadUserByUsername(email);
-        if(userDetails==null){
-            throw new BadCredentialsException("No user exists with this email register first");
-        }
-        if(!passwordEncoder.matches(password,userDetails.getPassword())){
-            throw new BadCredentialsException("Incorrect password");
-        }
-        return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
 
-    }
 }
