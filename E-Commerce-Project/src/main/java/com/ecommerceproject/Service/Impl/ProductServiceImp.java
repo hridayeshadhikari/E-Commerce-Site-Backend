@@ -91,6 +91,20 @@ public class ProductServiceImp implements ProductService {
         Product product1=findProductById(productId);
         if(req.getQuantity()!=0){
             product1.setQuantity(req.getQuantity());
+
+            product1.setTitle(req.getTitle());
+
+            product1.setColor(req.getColor());
+            product1.setCategory(req.getCategory());
+            product1.setBrand(req.getBrand());
+            product1.setPrice(req.getPrice());
+            product1.setDiscountedPrice(req.getDiscountedPrice());
+            product1.setDiscountPercent(req.getDiscountPercent());
+            product1.setHighlights(req.getHighlights());
+            product1.setImageUrl(req.getImageUrl());
+            product1.setExtraImageUrl(req.getExtraImageUrl());
+            product1.getSize().clear();
+            product1.setSize(req.getSize());
         }
 
         return productRepository.save(product1);

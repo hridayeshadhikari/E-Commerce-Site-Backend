@@ -19,7 +19,7 @@ public class UserController {
 
     private final UserService userService;
     @GetMapping("/profile")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    
     public ResponseEntity<User> getUserProfile(@RequestHeader("Authorization") String jwt) throws UserException {
             String token= jwt.substring("Bearer ".length());
             User user=userService.findUserByJwt(token);

@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class Size {
     private String name;
     private int quantity;
+    private String inStock;
 }

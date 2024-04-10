@@ -24,9 +24,6 @@ public class AdminController {
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
 
-//    @DeleteMapping("/{userId}/delete")
-//    public ResponseEntity<String> deleteUser(){
-//
-//    }
+
 
 }

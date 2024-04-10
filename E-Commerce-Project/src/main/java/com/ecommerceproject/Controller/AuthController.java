@@ -1,29 +1,32 @@
 package com.ecommerceproject.Controller;
 
 import com.ecommerceproject.Entity.Cart;
+import com.ecommerceproject.Entity.Role;
 import com.ecommerceproject.Entity.User;
 import com.ecommerceproject.Repository.UserRepository;
 import com.ecommerceproject.Request.AuthRequest;
+import com.ecommerceproject.Request.RegisterRequest;
 import com.ecommerceproject.Response.AuthResponse;
 import com.ecommerceproject.Security.JwtProvider;
 import com.ecommerceproject.Service.CartService;
 import com.ecommerceproject.Service.Impl.CustomUserDetailService;
+import com.ecommerceproject.Service.RoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.swing.*;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")
@@ -37,14 +40,15 @@ public class AuthController {
 
     private final JwtProvider jwtProvider;
     private AuthenticationManager authenticationManager;
+    private RoleService roleService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> registerUser(@RequestBody User user) throws Exception {
+    public ResponseEntity<AuthResponse> registerUser(@RequestBody RegisterRequest request) throws Exception {
 
-        String email=user.getEmail();
-        String password=user.getPassword();
-        String firstName=user.getFirstName();
-        String lastName=user.getLastName();
+        String email=request.getEmail();
+        String password=request.getPassword();
+        String firstName=request.getFirstName();
+        String lastName=request.getLastName();
         User isUserExist=userRepository.findByEmail(email);
         if(isUserExist!=null){
             throw new Exception("this email is associated with another account");
@@ -55,17 +59,26 @@ public class AuthController {
         createUser.setPassword(passwordEncoder.encode(password));
         createUser.setFirstName(firstName);
         createUser.setLastName(lastName);
+        createUser.setMobile("9876546465");
+        createUser.setTimeStamp(LocalDateTime.now());
+
+        Role role=roleService.findRoleByName("ROLE_USER");
+        Set<Role> roleSet= new HashSet<>();
+        roleSet.add(role);
+        createUser.setRoles(roleSet);
+
         User newUser=userRepository.save(createUser);
         Cart cart =cartService.createCart(newUser);
 
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                newUser.getEmail(),
-                newUser.getPassword()
-        ));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token= jwtProvider.generateToken(authentication);
-        AuthResponse response= new AuthResponse(token,"Registration Successful");
-        return new ResponseEntity<>(response,HttpStatus.CREATED);
+
+        String token = jwtProvider.generateToken(authentication);
+
+        AuthResponse authResponse= new AuthResponse(token,"Registration successful");
+
+
+        return new ResponseEntity<>(authResponse,HttpStatus.CREATED);
 
     }
 
