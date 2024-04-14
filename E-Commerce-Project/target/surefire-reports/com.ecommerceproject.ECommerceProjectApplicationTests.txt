@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.ecommerceproject.ECommerceProjectApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 18.39 s -- in com.ecommerceproject.ECommerceProjectApplicationTests

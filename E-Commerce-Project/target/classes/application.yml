@@ -1,0 +1,16 @@
+server:
+  port: 1213
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/E_COMMERCE_DB
+    username: root
+    password: Hridayesh1@
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+razorpay:
+  api:
+    key: rzp_test_PGQ7go2oZ9ocFp
+    secret: TjhDwqoZBUpSoZ6tAlvkiqNm
