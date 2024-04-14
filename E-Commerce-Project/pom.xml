@@ -98,6 +98,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>spring-boot-ecommerce</finalName>
     </build>
 
 </project>
